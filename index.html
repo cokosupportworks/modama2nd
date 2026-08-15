@@ -6,7 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>🟤第二期記録</title>
-
+  
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
   <link rel="icon" href="apple-touch-icon.png">
 
@@ -14,135 +14,407 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
+    /* =========================================
+       CSS Variables
+       ========================================= */
     :root {
       --bg-color: #F4F4F5;
       --surface-color: #FFFFFF;
       --text-main: #1C1C1E;
       --text-sub: #636366;
       --text-muted: #8E8E93;
+      
       --accent-color: #6D4C41;
       --primary-blue: #007AFF;
       --success-green: #34C759;
       --danger-red: #FF3B30;
+      
       --warning-bg: #FFF9C4;
       --warning-border: #FBC02D;
       --warning-text: #F57F17;
+      
       --border-color: #E5E5EA;
+      
       --font-base: 'BIZ UDPGothic', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'SF Mono', 'Roboto Mono', Menlo, Consolas, monospace;
+      
       --border-radius-lg: 12px;
       --border-radius-md: 8px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
-    body { font-family: var(--font-base); background-color: #000; color: var(--text-main); line-height: 1.5; user-select: none; -webkit-user-select: none; }
-    
-    .app-container {
-      background-color: var(--bg-color); max-width: 480px; margin: 0 auto;
-      height: 100dvh; position: relative; overflow: hidden; display: flex; flex-direction: column;
+    /* =========================================
+       Reset & Base
+       ========================================= */
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      touch-action: manipulation;
     }
 
-    .mono-num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
-    .text-sm { font-size: 0.85rem; } .text-xs { font-size: 0.75rem; }
-    .font-bold { font-weight: 700; } .text-sub { color: var(--text-sub); } .text-muted { color: var(--text-muted); }
-    .trend-up { color: var(--success-green); } .trend-down { color: var(--danger-red); }
+    body {
+      font-family: var(--font-base);
+      background-color: #000;
+      color: var(--text-main);
+      line-height: 1.5;
+      user-select: none;
+      -webkit-user-select: none;
+    }
 
-    .header { background-color: var(--accent-color); color: #FFF; padding: max(env(safe-area-inset-top), 16px) 16px 16px 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10; }
-    .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .app-title { font-size: 0.8rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
-    .btn-header-action { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 16px; font-size: 0.85rem; font-weight: bold; cursor: pointer; min-height: 44px; }
+    .app-container {
+      background-color: var(--bg-color);
+      max-width: 480px;
+      margin: 0 auto;
+      height: 100dvh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mono-num {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
     
-    .header-main-area { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 4px; }
-    .modama-name { font-size: 1.25rem; font-weight: bold; }
-    .time-status { background-color: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: var(--border-radius-md); font-size: 1.1rem; font-weight: bold; display: inline-block; margin-top: 4px; }
+    .text-sm { font-size: 0.85rem; }
+    .text-xs { font-size: 0.75rem; }
+    .font-bold { font-weight: 700; }
+    .text-sub { color: var(--text-sub); }
+    .text-muted { color: var(--text-muted); }
+    .trend-up { color: var(--success-green); }
+    .trend-down { color: var(--danger-red); }
+
+    /* =========================================
+       Header
+       ========================================= */
+    .header {
+      background-color: var(--accent-color);
+      color: #FFF;
+      padding: max(env(safe-area-inset-top), 16px) 16px 16px 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
     
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    
+    .app-title {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-header-action {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      cursor: pointer;
+      min-height: 44px;
+    }
+    
+    .header-main-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 4px;
+    }
+
+    .modama-name {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    
+    .time-status {
+      background-color: rgba(0,0,0,0.2);
+      padding: 8px 12px;
+      border-radius: var(--border-radius-md);
+      font-size: 1.1rem;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 4px;
+    }
+    
+    /* 上部配置の測定開始ボタン */
     .btn-measure-header {
-      background-color: var(--surface-color); color: var(--primary-blue);
-      padding: 12px 16px; border-radius: var(--border-radius-lg);
-      font-weight: bold; font-size: 0.95rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer;
-      display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+      background-color: var(--surface-color);
+      color: var(--primary-blue);
+      padding: 12px 16px;
+      border-radius: var(--border-radius-lg);
+      font-weight: bold;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
     }
     .btn-measure-header:active { transform: scale(0.95); }
 
-    .view-section { display: none; flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 80px; }
-    .view-section.active-view { display: block; }
+    /* =========================================
+       View Sections
+       ========================================= */
+    .view-section {
+      display: none;
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      padding-bottom: 80px; /* ナビ用余白のみ（アクションボタン廃止のため縮小） */
+    }
+    .view-section.active-view {
+      display: block;
+    }
 
+    /* =========================================
+       Bottom Navigation
+       ========================================= */
     .bottom-nav {
-      position: absolute; bottom: 0; left: 0; width: 100%; height: calc(60px + env(safe-area-inset-bottom));
-      background-color: var(--surface-color); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); z-index: 15;
+      position: absolute; bottom: 0; left: 0; width: 100%;
+      height: calc(60px + env(safe-area-inset-bottom));
+      background-color: var(--surface-color);
+      border-top: 1px solid var(--border-color);
+      display: flex; justify-content: space-around;
+      padding-bottom: env(safe-area-inset-bottom);
+      z-index: 15;
     }
-    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; min-height: 56px; }
+    .nav-item {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: var(--text-muted); cursor: pointer; min-height: 56px;
+    }
     .nav-item.active { color: var(--accent-color); }
-    .nav-icon { font-size: 1.4rem; margin-bottom: 2px; } .nav-label { font-size: 0.7rem; font-weight: bold; }
+    .nav-icon { font-size: 1.4rem; margin-bottom: 2px; }
+    .nav-label { font-size: 0.7rem; font-weight: bold; }
 
+    /* =========================================
+       Dashboard Layout
+       ========================================= */
     .dashboard-pagination {
-      display: flex; justify-content: space-between; align-items: center; background: var(--surface-color);
-      padding: 12px 16px; border-radius: var(--border-radius-lg); margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface-color);
+      padding: 12px 16px;
+      border-radius: var(--border-radius-lg);
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-color);
     }
-    .pagination-btn { background: var(--bg-color); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: var(--border-radius-md); font-weight: bold; color: var(--primary-blue); cursor: pointer; min-height: 44px; }
-    .pagination-btn:disabled { color: var(--text-muted); opacity: 0.5; cursor: not-allowed; }
+    .pagination-btn {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: var(--border-radius-md);
+      font-weight: bold;
+      color: var(--primary-blue);
+      cursor: pointer;
+      min-height: 44px;
+    }
+    .pagination-btn:disabled {
+      color: var(--text-muted);
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
 
-    .card { background: var(--surface-color); border-radius: var(--border-radius-lg); padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; }
-    .card-title { font-size: 1rem; font-weight: bold; color: var(--text-sub); }
-    .main-value-row { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; }
-    .main-value { font-size: 2.5rem; font-weight: bold; } .unit { font-size: 1.2rem; color: var(--text-sub); }
-    .raw-values { margin-bottom: 8px; font-family: var(--font-mono); }
-    .diff-stats { background-color: var(--bg-color); padding: 8px 12px; border-radius: var(--border-radius-md); display: flex; flex-direction: column; gap: 4px; }
-    .diff-row { display: flex; justify-content: space-between; font-size: 0.9rem; }
+    .card {
+      background: var(--surface-color);
+      border-radius: var(--border-radius-lg);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-color);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 8px;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--text-sub);
+    }
+    .main-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+    .main-value { font-size: 2.5rem; font-weight: bold; }
+    .unit { font-size: 1.2rem; color: var(--text-sub); }
     
-    .view-title { margin-bottom: 16px; font-size: 1.2rem; }
-    .chart-filters { display: flex; gap: 8px; margin-bottom: 12px; }
-    .filter-btn { flex: 1; padding: 10px 0; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: var(--border-radius-md); font-weight: bold; color: var(--text-sub); min-height: 44px; cursor: pointer; font-size: 0.9rem; }
-    .filter-btn.active { background: var(--accent-color); color: white; border-color: var(--accent-color); }
+    .raw-values {
+      margin-bottom: 8px;
+      font-family: var(--font-mono);
+    }
 
-    .settings-btn { display: block; width: 100%; text-align: left; padding: 16px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: var(--border-radius-md); margin-bottom: 12px; font-size: 1rem; font-weight: bold; cursor: pointer; min-height: 56px; }
+    .diff-stats {
+      background-color: var(--bg-color);
+      padding: 8px 12px;
+      border-radius: var(--border-radius-md);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .diff-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+
+    /* =========================================
+       Chart & Settings Views
+       ========================================= */
+    .view-title { margin-bottom: 16px; font-size: 1.2rem; }
+    
+    .chart-filters {
+      display: flex; gap: 8px; margin-bottom: 12px;
+    }
+    .filter-btn {
+      flex: 1; padding: 10px 0;
+      background: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      font-weight: bold; color: var(--text-sub);
+      min-height: 44px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .filter-btn.active {
+      background: var(--accent-color); color: white; border-color: var(--accent-color);
+    }
+
+    .settings-btn {
+      display: block; width: 100%; text-align: left;
+      padding: 16px; background: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      margin-bottom: 12px; font-size: 1rem; font-weight: bold;
+      cursor: pointer; min-height: 56px;
+    }
     .settings-btn.danger { color: var(--danger-red); }
 
-    .toast-container { position: absolute; top: max(env(safe-area-inset-top), 20px); left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 8px; width: 90%; pointer-events: none; }
-    .toast { background-color: rgba(40, 40, 40, 0.95); color: white; padding: 14px 20px; border-radius: var(--border-radius-lg); font-size: 0.95rem; font-weight: bold; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.2); animation: slideDown 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-    @keyframes slideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    /* =========================================
+       UI Components
+       ========================================= */
+    .toast-container {
+      position: absolute; top: max(env(safe-area-inset-top), 20px);
+      left: 50%; transform: translateX(-50%);
+      z-index: 1000; display: flex; flex-direction: column; gap: 8px; width: 90%;
+      pointer-events: none;
+    }
+    .toast {
+      background-color: rgba(40, 40, 40, 0.95); color: white;
+      padding: 14px 20px; border-radius: var(--border-radius-lg);
+      font-size: 0.95rem; font-weight: bold; text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      animation: slideDown 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
 
-    .confirm-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; display: none; align-items: center; justify-content: center; }
-    .confirm-modal { background: var(--surface-color); width: 85%; max-width: 320px; border-radius: var(--border-radius-lg); padding: 24px; text-align: center; }
+    .confirm-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); z-index: 3000;
+      display: none; align-items: center; justify-content: center;
+    }
+    .confirm-modal {
+      background: var(--surface-color); width: 85%; max-width: 320px;
+      border-radius: var(--border-radius-lg); padding: 24px; text-align: center;
+    }
     .confirm-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 8px; }
     .confirm-msg { color: var(--text-sub); font-size: 0.95rem; margin-bottom: 24px; }
     .confirm-actions { display: flex; gap: 12px; }
-    .confirm-actions button { flex: 1; padding: 12px 0; border: none; border-radius: var(--border-radius-md); font-weight: bold; font-size: 1rem; cursor: pointer; min-height: 44px; }
+    .confirm-actions button {
+      flex: 1; padding: 12px 0; border: none; border-radius: var(--border-radius-md);
+      font-weight: bold; font-size: 1rem; cursor: pointer; min-height: 44px;
+    }
     .btn-gray { background: var(--border-color); color: var(--text-main); }
     .btn-red { background: var(--danger-red); color: white; }
 
+    /* =========================================
+       Measurement Modal
+       ========================================= */
     #modal-toggle { display: none; }
-    .measure-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 100; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .measure-modal {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background-color: var(--bg-color); z-index: 100;
+      display: flex; flex-direction: column;
+      transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
     #modal-toggle:checked ~ .measure-modal { transform: translateY(0); }
-    .modal-header { background-color: var(--surface-color); padding: max(env(safe-area-inset-top), 16px) 16px 16px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
-    .btn-text { min-height: 44px; min-width: 44px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue); font-size: 1.1rem; font-weight: bold; background: none; border: none; cursor: pointer; }
+    
+    .modal-header {
+      background-color: var(--surface-color);
+      padding: max(env(safe-area-inset-top), 16px) 16px 16px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .btn-text {
+      min-height: 44px; min-width: 44px; display: flex; align-items: center; justify-content: center;
+      color: var(--primary-blue); font-size: 1.1rem; font-weight: bold;
+      background: none; border: none; cursor: pointer;
+    }
     .measure-tabs { display: flex; background-color: var(--surface-color); border-bottom: 1px solid var(--border-color); }
-    .tab-item { flex: 1; text-align: center; padding: 12px 0; font-weight: bold; color: var(--text-muted); border-bottom: 3px solid transparent; display: flex; align-items: center; justify-content: center; min-height: 48px; cursor: pointer; }
+    .tab-item {
+      flex: 1; text-align: center; padding: 12px 0; font-weight: bold; color: var(--text-muted);
+      border-bottom: 3px solid transparent; display: flex; align-items: center; justify-content: center;
+      min-height: 48px; cursor: pointer;
+    }
     .tab-item.active { color: var(--accent-color); border-bottom-color: var(--accent-color); }
     
     .input-sheet { flex: 1; overflow-y: auto; padding: 16px; }
-    .input-row { background-color: var(--surface-color); border: 2px solid var(--border-color); border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; min-height: 56px; cursor: pointer; }
+    .input-row {
+      background-color: var(--surface-color); border: 2px solid var(--border-color);
+      border-radius: var(--border-radius-md); padding: 12px 16px; margin-bottom: 12px;
+      display: flex; align-items: center; justify-content: space-between; min-height: 56px;
+      cursor: pointer;
+    }
     .input-row.active { border-color: var(--primary-blue); box-shadow: 0 0 0 2px rgba(0,122,255,0.2); }
     .input-row.outlier { background-color: var(--warning-bg); border-color: var(--warning-border); }
-    .input-label-area { display: flex; flex-direction: column; } .input-label { font-size: 1rem; font-weight: bold; color: var(--text-sub); } .outlier-badge { color: var(--warning-text); font-size: 0.75rem; font-weight: bold; margin-top: 2px; }
-    .input-value-area { display: flex; align-items: baseline; gap: 4px; } .input-value { font-size: 1.8rem; font-weight: bold; }
+    .input-label-area { display: flex; flex-direction: column; }
+    .input-label { font-size: 1rem; font-weight: bold; color: var(--text-sub); }
+    .outlier-badge { color: var(--warning-text); font-size: 0.75rem; font-weight: bold; margin-top: 2px; }
+    .input-value-area { display: flex; align-items: baseline; gap: 4px; }
+    .input-value { font-size: 1.8rem; font-weight: bold; }
     .cursor-blink::after { content: '|'; color: var(--primary-blue); animation: blink 1s step-end infinite; }
     @keyframes blink { 50% { opacity: 0; } }
-    
-    .custom-numpad { background-color: #D1D1D6; padding: 8px 8px calc(8px + env(safe-area-inset-bottom)) 8px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .numpad-btn { background-color: #FFFFFF; border: none; border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3); font-size: 1.7rem; font-family: var(--font-base); min-height: 56px; cursor: pointer; }
+
+    .custom-numpad {
+      background-color: #D1D1D6; padding: 8px 8px calc(8px + env(safe-area-inset-bottom)) 8px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    }
+    .numpad-btn {
+      background-color: #FFFFFF; border: none; border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+      font-size: 1.7rem; font-family: var(--font-base); min-height: 56px; cursor: pointer;
+    }
     .numpad-btn:active { background-color: #B5B9BE; }
-    .numpad-btn.control-btn { background-color: #AEB3BE; font-size: 1.2rem; } .numpad-btn.action-btn { background-color: var(--primary-blue); color: #FFF; font-size: 1.2rem; font-weight: bold; }
+    .numpad-btn.control-btn { background-color: #AEB3BE; font-size: 1.2rem; }
+    .numpad-btn.action-btn { background-color: var(--primary-blue); color: #FFF; font-size: 1.2rem; font-weight: bold; }
   </style>
 </head>
 <body id="app-body">
 
   <div class="app-container">
     
+    <!-- トースト通知コンテナ -->
     <div id="toast-container" class="toast-container"></div>
     
+    <!-- 確認モーダル -->
     <div class="confirm-modal-overlay" id="confirm-dialog">
       <div class="confirm-modal">
         <div class="confirm-title" id="confirm-title">確認</div>
@@ -154,6 +426,7 @@
       </div>
     </div>
 
+    <!-- ヘッダー -->
     <header class="header">
       <div class="header-top">
         <span class="app-title">Modama Tracker</span>
@@ -161,6 +434,7 @@
       </div>
       <div class="header-main-area">
         <div>
+          <!-- アプリタイトルを「🟤第二期記録」に変更 -->
           <div class="modama-name">🟤第二期記録</div>
           <div style="margin-top: 6px;">
             <div class="text-xs" style="opacity: 0.9;">浸水開始から</div>
@@ -172,6 +446,7 @@
       </div>
     </header>
 
+    <!-- ================= VIEW: Dashboard (記録) ================= -->
     <main id="view-dashboard" class="view-section active-view">
       
       <!-- ペジネーション -->
@@ -181,6 +456,7 @@
         <button id="btn-next-record" class="pagination-btn">最新 ▶</button>
       </div>
 
+      <!-- 重量カード -->
       <section class="card">
         <div class="card-header">
           <h2 class="card-title">⚖️ 重量 (Weight)</h2>
@@ -194,6 +470,7 @@
         <div class="diff-stats" id="diff-stats-weight"></div>
       </section>
 
+      <!-- 長さカード -->
       <section class="card">
         <div class="card-header">
           <h2 class="card-title">📏 長さ (Length)</h2>
@@ -206,6 +483,7 @@
         <div class="diff-stats" id="diff-stats-length"></div>
       </section>
 
+      <!-- 厚さカード -->
       <section class="card">
         <div class="card-header">
           <h2 class="card-title">🧊 厚さ (Thickness)</h2>
@@ -219,10 +497,11 @@
       </section>
     </main>
 
+    <!-- ================= VIEW: Chart (グラフ) ================= -->
     <main id="view-chart" class="view-section">
       <h2 class="view-title">📈 観察グラフ</h2>
       
-      <!-- グラフ指標切り替え（追加） -->
+      <!-- グラフ指標切り替え -->
       <div class="chart-filters" id="chart-metric-filters">
         <button class="filter-btn active" data-metric="weight">⚖️ 重量</button>
         <button class="filter-btn" data-metric="length">📏 長さ</button>
@@ -242,6 +521,7 @@
       </div>
     </main>
 
+    <!-- ================= VIEW: Settings (設定) ================= -->
     <main id="view-settings" class="view-section">
       <h2 class="view-title">⚙️ 設定</h2>
       
@@ -258,6 +538,7 @@
       <button class="settings-btn danger" id="btn-delete-all">⚠️ 全データ削除</button>
     </main>
 
+    <!-- ================= ボトムナビ ================= -->
     <nav class="bottom-nav" id="bottom-nav">
       <div class="nav-item active" data-nav="dashboard">
         <div class="nav-icon">📋</div><div class="nav-label">記録</div>
@@ -269,7 +550,8 @@
         <div class="nav-icon">💬</div><div class="nav-label">LINE出力</div>
       </div>
     </nav>
-
+    
+    <!-- ================= 測定入力モーダル ================= -->
     <input type="checkbox" id="modal-toggle">
     <div class="measure-modal">
       <div class="modal-header">
@@ -307,72 +589,102 @@
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
+  <!-- ================= JavaScript ロジック ================= -->
+  <!-- Firebase SDK をCDNから読み込む -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+    import { getFirestore, collection, doc, setDoc, onSnapshot, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+    document.addEventListener('DOMContentLoaded', async () => {
       
-      // ★浸水開始日時の変更
+      // ==========================================
+      // ★ Firebase設定 (ここに自分の設定を貼り付ける)
+      // ==========================================
+      // 先ほどFirebaseコンソールでコピーした `{ ... }` の部分を以下の内容と置き換えてください。
+      const firebaseConfig = {
+  apiKey: "AIzaSyC1aHP6GwovDuTyViuoMqxVkiarlWW3pSg",
+  authDomain: "modama2nd.firebaseapp.com",
+  projectId: "modama2nd",
+  storageBucket: "modama2nd.firebasestorage.app",
+  messagingSenderId: "58425407099",
+  appId: "1:58425407099:web:f0f692f2ebe49d5c1f94de"
+};
+
+      // ==========================================
+      // データステート
+      // ==========================================
       const START_DATE_STR = '2026-08-15T12:40:00+09:00';
       const START_DATE = new Date(START_DATE_STR);
       
       let records = [];
       let currentDisplayIndex = -1; // 表示中のレコード (-1は最新)
 
-      const DB_NAME = 'ModamaTrackerDB';
-      const DB_VERSION = 1;
-      const STORE_NAME = 'records';
-      let db;
+      let db, recordsCol;
 
-      function initDB() {
-        return new Promise((resolve, reject) => {
-          const request = indexedDB.open(DB_NAME, DB_VERSION);
-          request.onerror = (e) => { showToast('DBエラー'); reject(e); };
-          request.onsuccess = (e) => { db = e.target.result; resolve(db); };
-          request.onupgradeneeded = (e) => {
-            const database = e.target.result;
-            if (!database.objectStoreNames.contains(STORE_NAME)) {
-              database.createObjectStore(STORE_NAME, { keyPath: 'time' }); // timeを主キーとする
-            }
-          };
+      // ==========================================
+      // Firebase初期化とリアルタイム同期
+      // ==========================================
+      try {
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        db = getFirestore(app);
+
+        // 匿名で自動ログイン（ルールを突破するため）
+        await signInAnonymously(auth);
+        
+        // データを保存するコレクション (URLのようなもの)
+        // 例: 'modama_records' という場所に全員のデータを保存します
+        recordsCol = collection(db, 'modama_records');
+
+        // リアルタイム監視 (友達が追加しても自動でここが動く)
+        onSnapshot(recordsCol, (snapshot) => {
+          records = [];
+          snapshot.forEach(document => {
+            records.push(document.data());
+          });
+          
+          // 時間順に並び替え
+          records.sort((a, b) => new Date(a.time) - new Date(b.time));
+          
+          // 常に最新を表示するようにセット
+          currentDisplayIndex = records.length > 0 ? records.length - 1 : -1;
+          
+          // 画面とグラフを更新
+          updateDashboard();
+          if (typeof myChartInstance !== 'undefined' && myChartInstance) updateChart();
+        }, (error) => {
+          console.error("データ同期エラー:", error);
+          showToast('クラウド同期に失敗しました');
         });
+
+      } catch (error) {
+        console.error("Firebase Initialization Error:", error);
+        showToast('データベースの設定に問題があります。設定を見直してください。');
       }
 
-      function loadRecords() {
-        return new Promise((resolve) => {
-          if (!db) return resolve([]);
-          const tx = db.transaction([STORE_NAME], 'readonly');
-          const request = tx.objectStore(STORE_NAME).getAll();
-          request.onsuccess = (e) => {
-            let data = e.target.result || [];
-            // 時間順にソート
-            data.sort((a, b) => new Date(a.time) - new Date(b.time));
-            resolve(data);
-          };
-        });
-      }
-
-      function saveRecordToDB(record) {
-        return new Promise((resolve) => {
-          if (!db) return resolve();
-          const tx = db.transaction([STORE_NAME], 'readwrite');
-          tx.objectStore(STORE_NAME).put(record).onsuccess = resolve;
-        });
+      // クラウドへ保存関数
+      async function saveRecordToCloud(record) {
+        if (!recordsCol) return;
+        // 時間文字列をドキュメントIDとして保存（上書き防止）
+        const docRef = doc(recordsCol, record.time);
+        await setDoc(docRef, record);
       }
       
-      function clearAllDB() {
-        return new Promise((resolve) => {
-          if (!db) return resolve();
-          const tx = db.transaction([STORE_NAME], 'readwrite');
-          tx.objectStore(STORE_NAME).clear().onsuccess = resolve;
+      // 全データ削除関数 (クラウド上から消す)
+      async function clearAllCloud() {
+        if (!recordsCol) return;
+        const snapshot = await getDocs(recordsCol);
+        const promises = [];
+        snapshot.forEach(document => {
+          promises.push(deleteDoc(doc(recordsCol, document.id)));
         });
+        await Promise.all(promises);
       }
 
-      // DB初期化とロード実行
-      initDB().then(() => loadRecords()).then((data) => {
-        records = data;
-        currentDisplayIndex = records.length > 0 ? records.length - 1 : -1;
-        updateDashboard();
-      });
-
+      // ==========================================
+      // UI・画面遷移制御
+      // ==========================================
       const navItems = document.querySelectorAll('.nav-item');
       const views = document.querySelectorAll('.view-section');
       
@@ -404,6 +716,9 @@
         switchView('settings');
       });
 
+      // ==========================================
+      // 時間計算と表示更新
+      // ==========================================
       function updateElapsedTime() {
         const now = new Date();
         const diffMs = now - START_DATE;
@@ -425,6 +740,9 @@
         setTimeout(() => { toast.style.opacity='0'; setTimeout(()=>toast.remove(), 300); }, 3000);
       }
 
+      // ==========================================
+      // ダッシュボード更新ロジック
+      // ==========================================
       function getDiffHTML(current, previous, unit) {
         if (previous === null || previous === undefined) return '<span class="text-sub mono-num">比較データなし</span>';
         const diff = current - previous;
@@ -443,7 +761,6 @@
       function updateDashboard() {
         const idx = currentDisplayIndex;
         if (records.length === 0 || idx < 0 || idx >= records.length) {
-          // データなし状態
           ['weight', 'length', 'thickness'].forEach(k => {
              document.getElementById(`dash-${k}`).textContent = '--';
              document.getElementById(`dash-time-${k}`).textContent = '未測定';
@@ -459,7 +776,6 @@
         const target = records[idx];
         const prev = idx > 0 ? records[idx - 1] : null;
 
-        // ページネーション更新
         document.getElementById('record-page-info').textContent = `${idx + 1} / ${records.length}`;
         document.getElementById('btn-prev-record').disabled = (idx === 0);
         document.getElementById('btn-next-record').disabled = (idx === records.length - 1);
@@ -467,17 +783,13 @@
         const d = new Date(target.time);
         const timeStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} 測定`;
 
-        // 共通更新ループ
         ['weight', 'length', 'thickness'].forEach(k => {
            document.getElementById(`dash-${k}`).textContent = target[k].toFixed(2);
            document.getElementById(`dash-time-${k}`).textContent = timeStr;
-           
-           // 実測値の表示 (データモデルに追加した raw にアクセス)
            document.getElementById(`raw-${k}`).textContent = `実測値: (${formatRawValues(target.raw?.[k])})`;
            
            let statsHTML = `<div class="diff-row"><span class="text-sub">前回比</span>${getDiffHTML(target[k], prev ? prev[k] : null, k==='weight'?'g':'mm')}</div>`;
            
-           // 重量のみ変化速度を計算
            if (k === 'weight' && prev) {
               const hours = (new Date(target.time) - new Date(prev.time)) / (1000 * 60 * 60);
               if (hours > 0) {
@@ -491,22 +803,18 @@
         });
       }
 
-      // ペジネーションボタンイベント
       document.getElementById('btn-prev-record').addEventListener('click', () => {
-        if(currentDisplayIndex > 0) {
-          currentDisplayIndex--;
-          updateDashboard();
-        }
+        if(currentDisplayIndex > 0) { currentDisplayIndex--; updateDashboard(); }
       });
       document.getElementById('btn-next-record').addEventListener('click', () => {
-        if(currentDisplayIndex < records.length - 1) {
-          currentDisplayIndex++;
-          updateDashboard();
-        }
+        if(currentDisplayIndex < records.length - 1) { currentDisplayIndex++; updateDashboard(); }
       });
 
+      // ==========================================
+      // Chart.js グラフ描画
+      // ==========================================
       let myChartInstance = null;
-      let currentChartMetric = 'weight'; // weight | length | thickness
+      let currentChartMetric = 'weight'; 
       let currentChartRange = '1週';
 
       const metricConfig = {
@@ -517,21 +825,15 @@
 
       function updateChart() {
         if (!myChartInstance || records.length === 0) return;
-
         const now = new Date();
-        let limitMs = 0;
-        if (currentChartRange === '24h') limitMs = 24 * 60 * 60 * 1000;
-        else if (currentChartRange === '3日') limitMs = 3 * 24 * 60 * 60 * 1000;
-        else if (currentChartRange === '1週') limitMs = 7 * 24 * 60 * 60 * 1000;
-        else limitMs = Infinity;
+        let limitMs = currentChartRange === '24h' ? 24*60*60*1000 : (currentChartRange === '3日' ? 3*24*60*60*1000 : (currentChartRange === '1週' ? 7*24*60*60*1000 : Infinity));
         
         let filtered = records.filter(r => (now - new Date(r.time)) <= limitMs);
         if (filtered.length === 0) filtered = [records[records.length - 1]];
 
         const labels = filtered.map(r => {
           const d = new Date(r.time);
-          if (currentChartRange === '24h') return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-          return `${d.getMonth()+1}/${d.getDate()}`;
+          return currentChartRange === '24h' ? `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}` : `${d.getMonth()+1}/${d.getDate()}`;
         });
         
         const data = filtered.map(r => r[currentChartMetric]);
@@ -542,163 +844,100 @@
         myChartInstance.data.datasets[0].data = data;
         myChartInstance.data.datasets[0].borderColor = conf.color;
         myChartInstance.data.datasets[0].backgroundColor = conf.bg;
-        
-        // Y軸のタイトル更新
         myChartInstance.options.scales.y.title.text = `${conf.label} (${conf.unit})`;
-        
         myChartInstance.update();
       }
 
       function initChart() {
         const ctx = document.getElementById('myChart').getContext('2d');
         const conf = metricConfig[currentChartMetric];
-        
         myChartInstance = new Chart(ctx, {
           type: 'line',
-          data: {
-            labels: [], datasets: [{
-              label: `${conf.label} (${conf.unit})`,
-              data: [], borderColor: conf.color, backgroundColor: conf.bg,
-              tension: 0.3, fill: true
-            }]
-          },
-          options: {
-            responsive: true, interaction: { mode: 'index', intersect: false },
-            scales: {
-              y: { type: 'linear', display: true, position: 'left', title: {display: true, text: `${conf.label} (${conf.unit})`} }
-            }
-          }
+          data: { labels: [], datasets: [{ label: `${conf.label} (${conf.unit})`, data: [], borderColor: conf.color, backgroundColor: conf.bg, tension: 0.3, fill: true }] },
+          options: { responsive: true, interaction: { mode: 'index', intersect: false }, scales: { y: { type: 'linear', display: true, position: 'left', title: {display: true, text: `${conf.label} (${conf.unit})`} } } }
         });
         updateChart();
       }
 
-      // 指標切り替えイベント
       const metricBtns = document.querySelectorAll('#chart-metric-filters .filter-btn');
       metricBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-          metricBtns.forEach(b => b.classList.remove('active'));
-          e.target.classList.add('active');
-          currentChartMetric = e.target.dataset.metric;
-          updateChart();
+          metricBtns.forEach(b => b.classList.remove('active')); e.target.classList.add('active');
+          currentChartMetric = e.target.dataset.metric; updateChart();
         });
       });
 
-      // 期間切り替えイベント
       const timeBtns = document.querySelectorAll('#chart-time-filters .filter-btn');
       timeBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-          timeBtns.forEach(b => b.classList.remove('active'));
-          e.target.classList.add('active');
-          currentChartRange = e.target.dataset.range;
-          updateChart();
+          timeBtns.forEach(b => b.classList.remove('active')); e.target.classList.add('active');
+          currentChartRange = e.target.dataset.range; updateChart();
         });
       });
 
-
-      // JSONバックアップ
+      // ==========================================
+      // 設定画面機能
+      // ==========================================
       document.getElementById('btn-export-json').addEventListener('click', () => {
         if(records.length === 0) return showToast('出力するデータがありません');
-        const dataStr = JSON.stringify(records, null, 2);
-        const blob = new Blob([dataStr], {type: 'application/json'});
+        const blob = new Blob([JSON.stringify(records, null, 2)], {type: 'application/json'});
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `modama_backup_${new Date().getTime()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
+        const a = document.createElement('a'); a.href = url; a.download = `modama_backup_${new Date().getTime()}.json`; a.click(); URL.revokeObjectURL(url);
         showToast('バックアップをダウンロードしました');
       });
 
-      // JSON復元
-      document.getElementById('btn-import-json').addEventListener('click', () => {
-        document.getElementById('file-import-json').click();
-      });
-      
+      document.getElementById('btn-import-json').addEventListener('click', () => document.getElementById('file-import-json').click());
       document.getElementById('file-import-json').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if(!file) return;
-        
+        const file = e.target.files[0]; if(!file) return;
         const reader = new FileReader();
         reader.onload = async (ev) => {
           try {
             const importedData = JSON.parse(ev.target.result);
-            if(!Array.isArray(importedData)) throw new Error("Invalid format");
-            
-            // 全データをクリアして入れ替える
-            await clearAllDB();
+            if(!Array.isArray(importedData)) throw new Error();
+            showToast('復元中...少々お待ちください');
+            await clearAllCloud(); // クラウドを一度空にする
             for(const record of importedData) {
-               await saveRecordToDB(record);
+               await saveRecordToCloud(record); // 1つずつクラウドへアップロード
             }
-            
-            // メモリ再読み込み
-            records = await loadRecords();
-            currentDisplayIndex = records.length > 0 ? records.length - 1 : -1;
-            updateDashboard();
-            if(myChartInstance) updateChart();
-            showToast('✅ データを復元しました');
-          } catch(err) {
-            showToast('⚠️ ファイルの読み込みに失敗しました');
-          }
-          // リセット
+            showToast('✅ データを復元しました（クラウド同期完了）');
+          } catch(err) { showToast('⚠️ ファイルの読み込みに失敗しました'); }
           e.target.value = '';
         };
         reader.readAsText(file);
       });
 
-      // CSVエクスポート
       document.getElementById('btn-export-csv').addEventListener('click', () => {
         if(records.length === 0) return showToast('データがありません');
-        
         let csvContent = 'Time,Weight(g),Length(mm),Thickness(mm)\n';
-        records.forEach(r => {
-          csvContent += `${r.time},${r.weight},${r.length},${r.thickness}\n`;
-        });
-        
+        records.forEach(r => csvContent += `${r.time},${r.weight},${r.length},${r.thickness}\n`);
         const blob = new Blob([csvContent], {type: 'text/csv'});
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'modama_data.csv';
-        a.click();
-        URL.revokeObjectURL(url);
+        const a = document.createElement('a'); a.href = url; a.download = 'modama_data.csv'; a.click(); URL.revokeObjectURL(url);
         showToast('CSVを出力しました');
       });
 
-      // 全データ削除 (モーダル連携)
       const confirmModal = document.getElementById('confirm-dialog');
       let confirmAction = null;
-      
       function showConfirm(title, msg, onOk) {
         document.getElementById('confirm-title').textContent = title;
         document.getElementById('confirm-msg').textContent = msg;
-        confirmAction = onOk;
-        confirmModal.style.display = 'flex';
+        confirmAction = onOk; confirmModal.style.display = 'flex';
       }
-      
-      document.getElementById('btn-confirm-cancel').addEventListener('click', () => {
-        confirmModal.style.display = 'none';
-      });
-      
-      document.getElementById('btn-confirm-ok').addEventListener('click', () => {
-        confirmModal.style.display = 'none';
-        if(confirmAction) confirmAction();
-      });
+      document.getElementById('btn-confirm-cancel').addEventListener('click', () => confirmModal.style.display = 'none');
+      document.getElementById('btn-confirm-ok').addEventListener('click', () => { confirmModal.style.display = 'none'; if(confirmAction) confirmAction(); });
 
       document.getElementById('btn-delete-all').addEventListener('click', () => {
-        showConfirm('⚠️ 全データ削除', 'すべての記録が完全に消去されます。本当によろしいですか？', async () => {
-          records = [];
-          currentDisplayIndex = -1;
-          await clearAllDB();
-          updateDashboard();
-          if(myChartInstance) updateChart();
+        showConfirm('⚠️ 全データ削除', 'すべての記録がクラウドからも完全に消去されます。本当によろしいですか？', async () => {
+          await clearAllCloud();
           showToast('データをすべて削除しました');
         });
       });
 
+      // ==========================================
+      // LINE出力機能
+      // ==========================================
       function exportToLine() {
         if (records.length === 0) return showToast('出力するデータがありません');
-        
-        // 常に現在表示しているページのデータを出力する
         const targetIdx = currentDisplayIndex > -1 ? currentDisplayIndex : records.length - 1;
         const targetRecord = records[targetIdx];
         const prevRecord = targetIdx > 0 ? records[targetIdx - 1] : null;
@@ -716,10 +955,7 @@
         let speedText = '計算不能';
         if (prevRecord) {
           const hours = (new Date(targetRecord.time) - new Date(prevRecord.time)) / (1000 * 60 * 60);
-          if (hours > 0) {
-            const speed = (targetRecord.weight - prevRecord.weight) / hours;
-            speedText = `${speed > 0 ? '+' : ''}${speed.toFixed(2)} g/h`;
-          }
+          if (hours > 0) speedText = `${((targetRecord.weight - prevRecord.weight) / hours) > 0 ? '+' : ''}${((targetRecord.weight - prevRecord.weight) / hours).toFixed(2)} g/h`;
         }
 
         const text = `🌱 【🟤第二期記録】
@@ -737,13 +973,13 @@ ${getDiffText(targetRecord.length, prevRecord ? prevRecord.length : null, 'mm')}
 🧊 厚さ: ${targetRecord.thickness.toFixed(2)} mm
 ${getDiffText(targetRecord.thickness, prevRecord ? prevRecord.thickness : null, 'mm')}`;
 
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(text).then(() => showToast('✅ LINE用レポートをコピー')).catch(() => showToast('コピー失敗'));
-        } else {
-          showToast('未対応ブラウザです');
-        }
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => showToast('✅ LINE用レポートをコピー')).catch(() => showToast('コピー失敗'));
+        else showToast('未対応ブラウザです');
       }
 
+      // ==========================================
+      // 測定入力ロジック
+      // ==========================================
       const limits = { weight: 5, length: 4, thickness: 4 };
       let state = {
         activeTab: 'weight', activeRowIndex: 0,
@@ -762,28 +998,21 @@ ${getDiffText(targetRecord.thickness, prevRecord ? prevRecord.thickness : null, 
         datetimeInput.value = now.toISOString().slice(0, 16);
       }
 
-      // 「＋ 測定開始」ボタン (ヘッダー内)
-      document.getElementById('btn-start-measure').addEventListener('click', () => {
-        setDatetimeInputToNow();
-      });
+      document.getElementById('btn-start-measure').addEventListener('click', () => setDatetimeInputToNow());
 
       tabs.forEach(tab => {
         tab.addEventListener('click', (e) => {
-          tabs.forEach(t => t.classList.remove('active'));
-          e.currentTarget.classList.add('active');
-          state.activeTab = e.currentTarget.dataset.tab;
-          state.activeRowIndex = 0;
-          renderInputSheet();
+          tabs.forEach(t => t.classList.remove('active')); e.currentTarget.classList.add('active');
+          state.activeTab = e.currentTarget.dataset.tab; state.activeRowIndex = 0; renderInputSheet();
         });
       });
 
       numpad.addEventListener('click', (e) => {
         if (!e.target.classList.contains('numpad-btn')) return;
-        const key = e.target.dataset.key;
-        if (key) handleNumpadInput(key);
+        if (e.target.dataset.key) handleNumpadInput(e.target.dataset.key);
       });
 
-      // 保存処理
+      // 保存処理 (Firebaseへ送る)
       document.getElementById('btn-save').addEventListener('click', async () => {
         const selectedTime = datetimeInput.value;
         if (!selectedTime) return showToast('測定日時を指定してください');
@@ -794,10 +1023,8 @@ ${getDiffText(targetRecord.thickness, prevRecord ? prevRecord.thickness : null, 
 
         if (!wAvg && !lAvg && !tAvg) return showToast('入力データがありません');
 
-        // 最新のデータを取得（未入力項目のフォールバック用）
         const lastRecord = records.length > 0 ? records[records.length - 1] : { weight: 0, length: 0, thickness: 0 };
 
-        // 実測値の生データも保存する (rawプロパティ)
         const newRecord = {
             time: new Date(selectedTime).toISOString(),
             weight: wAvg ? parseFloat(wAvg) : lastRecord.weight,
@@ -810,36 +1037,27 @@ ${getDiffText(targetRecord.thickness, prevRecord ? prevRecord.thickness : null, 
             }
         };
 
-        records.push(newRecord);
-        records.sort((a, b) => new Date(a.time) - new Date(b.time));
-        
-        // IndexedDBに保存
-        await saveRecordToDB(newRecord);
-
-        // 表示インデックスを最新にして描画
-        currentDisplayIndex = records.length - 1;
-        updateDashboard();
-        if (myChartInstance) updateChart();
-
+        // Firebase (Cloud) にデータを送信
+        await saveRecordToCloud(newRecord);
         showToast('✅ 測定データを保存しました');
-        document.getElementById('btn-cancel').click(); // モーダルを閉じる(チェックボックスハック連動)
+        document.getElementById('btn-cancel').click();
       });
 
-      document.getElementById('btn-cancel').addEventListener('click', resetInputData);
+      document.getElementById('btn-cancel').addEventListener('click', () => {
+         state.data = { weight: ['', '', '', '', ''], length: ['', '', '', ''], thickness: ['', '', '', ''] };
+         state.activeTab = 'weight'; state.activeRowIndex = 0;
+         tabs.forEach(t => t.classList.remove('active')); tabs[0].classList.add('active'); renderInputSheet();
+      });
 
       function handleNumpadInput(key) {
-        const tab = state.activeTab;
-        let currentVal = state.data[tab][state.activeRowIndex];
-
+        const tab = state.activeTab; let currentVal = state.data[tab][state.activeRowIndex];
         if (key === 'bs') currentVal = currentVal.slice(0, -1);
         else if (key === 'next') { if (state.activeRowIndex < limits[tab] - 1) state.activeRowIndex++; }
         else if (key === '.') { if (!currentVal.includes('.')) currentVal += (currentVal === '' ? '0.' : '.'); }
         else {
           if (currentVal.includes('.')) { if (currentVal.split('.')[1].length >= 2) return; }
-          if (currentVal.length >= 6) return;
-          currentVal += key;
+          if (currentVal.length >= 6) return; currentVal += key;
         }
-
         if (key !== 'next') state.data[tab][state.activeRowIndex] = currentVal;
         renderInputSheet();
       }
@@ -859,43 +1077,23 @@ ${getDiffText(targetRecord.thickness, prevRecord ? prevRecord.thickness : null, 
       }
 
       function renderInputSheet() {
-        const tab = state.activeTab;
-        const values = state.data[tab];
+        const tab = state.activeTab; const values = state.data[tab];
         document.getElementById('max-measure-text').textContent = `最大${limits[tab]}回`;
-        const avg = calculateAverage(values);
-        avgDisplay.textContent = avg ? `平均: ${avg}` : '平均: -';
+        const avg = calculateAverage(values); avgDisplay.textContent = avg ? `平均: ${avg}` : '平均: -';
 
-        inputContainer.innerHTML = '';
-        const outliers = calculateOutliers(values);
-
+        inputContainer.innerHTML = ''; const outliers = calculateOutliers(values);
         for (let i = 0; i < limits[tab]; i++) {
-          const isActive = i === state.activeRowIndex;
-          const isEmpty = values[i] === '';
-          
+          const isActive = i === state.activeRowIndex; const isEmpty = values[i] === '';
           const row = document.createElement('div');
           row.className = `input-row ${isActive ? 'active' : ''} ${outliers[i] ? 'outlier' : ''}`;
           if (isEmpty && !isActive) row.style.opacity = '0.5';
           row.addEventListener('click', () => { state.activeRowIndex = i; renderInputSheet(); });
-
           row.innerHTML = `
-            <div class="input-label-area">
-              <span class="input-label">${i + 1}回目</span>
-              ${outliers[i] ? '<span class="outlier-badge">⚠ 外れ候補</span>' : ''}
-            </div>
-            <div class="input-value-area">
-              <span class="input-value mono-num ${isActive ? 'cursor-blink' : ''}">${isEmpty && !isActive ? '-' : values[i]}</span>
-            </div>`;
+            <div class="input-label-area"><span class="input-label">${i + 1}回目</span>${outliers[i] ? '<span class="outlier-badge">⚠ 外れ候補</span>' : ''}</div>
+            <div class="input-value-area"><span class="input-value mono-num ${isActive ? 'cursor-blink' : ''}">${isEmpty && !isActive ? '-' : values[i]}</span></div>`;
           inputContainer.appendChild(row);
         }
       }
-
-      function resetInputData() {
-         state.data = { weight: ['', '', '', '', ''], length: ['', '', '', ''], thickness: ['', '', '', ''] };
-         state.activeTab = 'weight'; state.activeRowIndex = 0;
-         tabs.forEach(t => t.classList.remove('active')); tabs[0].classList.add('active');
-         renderInputSheet();
-      }
-      
       renderInputSheet();
     });
   </script>
