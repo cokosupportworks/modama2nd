@@ -592,8 +592,8 @@
   <!-- ================= JavaScript ロジック ================= -->
   <!-- Firebase SDK をCDNから読み込む -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-    import { getFirestore, collection, doc, setDoc, onSnapshot, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, doc, setDoc, onSnapshot, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     document.addEventListener('DOMContentLoaded', async () => {
       
@@ -650,12 +650,12 @@
           if (typeof myChartInstance !== 'undefined' && myChartInstance) updateChart();
         }, (error) => {
           console.error("データ同期エラー:", error);
-          showToast('クラウド同期に失敗しました');
+          showToast('データ同期エラー: ' + error.message);
         });
 
       } catch (error) {
         console.error("Firebase Initialization Error:", error);
-        showToast('データベースの設定に問題があります。設定を見直してください。');
+        showToast('エラー詳細: ' + error.message);
       }
 
       // クラウドへ保存関数
