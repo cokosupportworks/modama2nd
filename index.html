@@ -593,7 +593,6 @@
   <!-- Firebase SDK をCDNから読み込む -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
     import { getFirestore, collection, doc, setDoc, onSnapshot, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
     document.addEventListener('DOMContentLoaded', async () => {
@@ -627,12 +626,8 @@
       // ==========================================
       try {
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         db = getFirestore(app);
 
-        // 匿名で自動ログイン（ルールを突破するため）
-        await signInAnonymously(auth);
-        
         // データを保存するコレクション (URLのようなもの)
         // 例: 'modama_records' という場所に全員のデータを保存します
         recordsCol = collection(db, 'modama_records');
