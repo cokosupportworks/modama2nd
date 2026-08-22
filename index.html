@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>🟤第二期記録</title>
+  <title>🟤第二期記録v2</title>
   
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
   <link rel="icon" href="apple-touch-icon.png">
@@ -432,17 +432,26 @@
         <span class="app-title">Modama Tracker</span>
         <button class="btn-header-action" id="btn-settings">⚙️ 設定</button>
       </div>
-      <div class="header-main-area">
-        <div>
-          <!-- アプリタイトルを「🟤第二期記録」に変更 -->
-          <div class="modama-name">🟤第二期記録</div>
-          <div style="margin-top: 6px;">
-            <div class="text-xs" style="opacity: 0.9;">浸水開始から</div>
-            <div class="time-status mono-num" id="header-time">計算中...</div>
+      <div class="header-main-area" style="flex-direction: column; align-items: stretch; gap: 12px; margin-top: 8px;">
+        <!-- 上段：タイトルと測定開始ボタン -->
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div class="modama-name">🟤第二期記録 2nd stage</div>
+          <label for="modal-toggle" class="btn-measure-header" id="btn-start-measure" style="min-height: 36px; padding: 8px 12px; font-size: 0.85rem; margin: 0;">＋ 測定開始</label>
+        </div>
+        
+        <!-- 下段：時間経過の横並び -->
+        <div style="display: flex; justify-content: space-between; gap: 8px;">
+          <!-- 浸水開始 -->
+          <div style="flex: 1; background-color: rgba(0,0,0,0.2); padding: 6px 8px; border-radius: var(--border-radius-md);">
+             <div class="text-xs" style="opacity: 0.9; margin-bottom: 2px;">浸水開始から</div>
+             <div class="time-status mono-num" id="header-time" style="padding:0; background:transparent; font-size:0.95rem;">計算中...</div>
+          </div>
+          <!-- ペーパーベッド -->
+          <div style="flex: 1; background-color: rgba(0,0,0,0.2); padding: 6px 8px; border-radius: var(--border-radius-md);">
+             <div class="text-xs" style="opacity: 0.9; margin-bottom: 2px;">ペーパーベッドに引越しから</div>
+             <div class="time-status mono-num" id="header-time-paper" style="padding:0; background:transparent; font-size:0.95rem;">計算中...</div>
           </div>
         </div>
-        <!-- 上部に測定開始ボタンを配置 -->
-        <label for="modal-toggle" class="btn-measure-header" id="btn-start-measure">＋ 測定開始</label>
       </div>
     </header>
 
@@ -615,6 +624,8 @@
       // ==========================================
       const START_DATE_STR = '2026-08-15T12:40:00+09:00';
       const START_DATE = new Date(START_DATE_STR);
+      const PAPER_BED_DATE_STR = '2026-08-18T20:53:00+09:00';
+      const PAPER_BED_DATE = new Date(PAPER_BED_DATE_STR);
       
       let records = [];
       let currentDisplayIndex = -1; // 表示中のレコード (-1は最新)
@@ -714,15 +725,18 @@
       // ==========================================
       // 時間計算と表示更新
       // ==========================================
-      function updateElapsedTime() {
-        const now = new Date();
-        const diffMs = now - START_DATE;
-        if (diffMs < 0) { document.getElementById('header-time').textContent = '開始前'; return; }
-        
+      function formatDiff(diffMs) {
+        if (diffMs < 0) return '待機中';
         const d = Math.floor(diffMs / (1000 * 60 * 60 * 24));
         const h = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const m = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-        document.getElementById('header-time').textContent = `${d}日 ${h}時間 ${m}分`;
+        return `${d}日 ${h}時間 ${m}分`;
+      }
+
+      function updateElapsedTime() {
+        const now = new Date();
+        document.getElementById('header-time').textContent = formatDiff(now - START_DATE);
+        document.getElementById('header-time-paper').textContent = formatDiff(now - PAPER_BED_DATE);
       }
       updateElapsedTime();
       setInterval(updateElapsedTime, 60000);
@@ -813,9 +827,9 @@
       let currentChartRange = '1週';
 
       const metricConfig = {
-        weight: { label: '重量', unit: 'g', color: '#007AFF', bg: 'rgba(0, 122, 255, 0.1)' },
-        length: { label: '長さ', unit: 'mm', color: '#34C759', bg: 'rgba(52, 199, 89, 0.1)' },
-        thickness: { label: '厚さ', unit: 'mm', color: '#FF9500', bg: 'rgba(255, 149, 0, 0.1)' }
+        weight: { label: '重量', unit: 'g', color: '#007AFF', colorBefore: '#A0A0A5', bg: 'rgba(0, 122, 255, 0.1)' },
+        length: { label: '長さ', unit: 'mm', color: '#34C759', colorBefore: '#A0A0A5', bg: 'rgba(52, 199, 89, 0.1)' },
+        thickness: { label: '厚さ', unit: 'mm', color: '#FF9500', colorBefore: '#A0A0A5', bg: 'rgba(255, 149, 0, 0.1)' }
       };
 
       function updateChart() {
@@ -834,11 +848,25 @@
         const data = filtered.map(r => r[currentChartMetric]);
         const conf = metricConfig[currentChartMetric];
 
+        // グラフのポイント（点）の色を引越し前後で判別
+        const pointColors = filtered.map(r => new Date(r.time) < PAPER_BED_DATE ? conf.colorBefore : conf.color);
+
         myChartInstance.data.labels = labels;
         myChartInstance.data.datasets[0].label = `${conf.label} (${conf.unit})`;
         myChartInstance.data.datasets[0].data = data;
-        myChartInstance.data.datasets[0].borderColor = conf.color;
         myChartInstance.data.datasets[0].backgroundColor = conf.bg;
+        myChartInstance.data.datasets[0].pointBackgroundColor = pointColors;
+        myChartInstance.data.datasets[0].pointBorderColor = pointColors;
+        
+        // セグメント（線）の色を引越し前後で判別
+        myChartInstance.data.datasets[0].segment = {
+          borderColor: ctx => {
+            if (!filtered[ctx.p1DataIndex]) return conf.color;
+            const p1Time = new Date(filtered[ctx.p1DataIndex].time);
+            return p1Time < PAPER_BED_DATE ? conf.colorBefore : conf.color;
+          }
+        };
+
         myChartInstance.options.scales.y.title.text = `${conf.label} (${conf.unit})`;
         myChartInstance.update();
       }
@@ -848,7 +876,7 @@
         const conf = metricConfig[currentChartMetric];
         myChartInstance = new Chart(ctx, {
           type: 'line',
-          data: { labels: [], datasets: [{ label: `${conf.label} (${conf.unit})`, data: [], borderColor: conf.color, backgroundColor: conf.bg, tension: 0.3, fill: true }] },
+          data: { labels: [], datasets: [{ label: `${conf.label} (${conf.unit})`, data: [], tension: 0.3, fill: true }] },
           options: { responsive: true, interaction: { mode: 'index', intersect: false }, scales: { y: { type: 'linear', display: true, position: 'left', title: {display: true, text: `${conf.label} (${conf.unit})`} } } }
         });
         updateChart();
